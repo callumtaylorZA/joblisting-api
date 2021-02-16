@@ -19,43 +19,43 @@ produces:
   - application/json
 paths:
   /job-listings:
-    x-swagger-router-controller: job_listing
-    #Route: Get all job listings.
-    get:
-        operationId: getAll
-        description: get all job listings
-        responses:
-          "200":
-            description: Success
-            schema:
-              $ref: "#/definitions/GetJobListingsResponse"
-          default:
-            description: Error
-            schema:
-              $ref: "#/definitions/ErrorResponse"
-    #Route: Post/create a new job listing.
-    post:
-        operationId: save
-        description: create a new job listing
-        parameters:
-          - name: title
-            description: Job listing details
-            in: body
-            required: true
-            schema:
-              $ref: "#/definitions/JobListing"
-        responses:
-          "200":
-            description: Success
-            schema:
-              $ref: "#/definitions/JobListingCreatedResponse"
-          default:
-            description: Error
-            schema:
-              $ref: "#/definitions/ErrorResponse"
-  /job-listings/{id}:
       x-swagger-router-controller: job_listing
       #Route: Get all job listings.
+      get:
+          operationId: getAll
+          description: get all job listings
+          responses:
+            "200":
+              description: Success
+              schema:
+                $ref: "#/definitions/GetJobListingsResponse"
+            default:
+              description: Error
+              schema:
+                $ref: "#/definitions/ErrorResponse"
+      #Route: Post/create a new job listing.
+      post:
+          operationId: save
+          description: create a new job listing
+          parameters:
+            - name: title
+              description: Job listing details
+              in: body
+              required: true
+              schema:
+                $ref: "#/definitions/JobListing"
+          responses:
+            "200":
+              description: Success
+              schema:
+                $ref: "#/definitions/JobListingCreatedResponse"
+            default:
+              description: Error
+              schema:
+                $ref: "#/definitions/ErrorResponse"
+  /job-listings/{id}:
+      x-swagger-router-controller: job_listing
+      #Route: Get job listing by Id.
       get:
           operationId: getById
           description: get a single job listing by id
@@ -115,10 +115,161 @@ paths:
               description: Error
               schema:
                 $ref: "#/definitions/ErrorResponse"
+  /job-listings/{id}/applicants:
+      x-swagger-router-controller: job_listing
+      #Route: Get applicants for a job listing id
+      get:
+          operationId: getApplicantsByJobListingId
+          description: get the list of applicants from a job listing id
+          parameters:
+            - name: id
+              description: the id of the job listing
+              type: string
+              in: path
+              required: true
+          responses:
+            "200":
+              description: Success
+              schema:
+                $ref: "#/definitions/GetJobListingApplicants"
+            default:
+              description: Error
+              schema:
+                $ref: "#/definitions/ErrorResponse"
+      post:
+          operationId: addApplicant
+          description: add a new applicant to a job listing
+          parameters:
+            - name: id
+              description: id of the job listing
+              type: string
+              in: path
+              required: true
+            - name: applicant
+              description: Applicant details
+              in: body
+              required: true
+              schema:
+                $ref: "#/definitions/Applicant"
+          responses:
+            "200":
+              description: Success
+              schema:
+                $ref: "#/definitions/ApplicantAddedResponse"
+            default:
+              description: Error
+              schema:
+                $ref: "#/definitions/ErrorResponse"
+  /job-listings/{id}/applicants/{applicant-id}:
+      x-swagger-router-controller: job_listing
+      #Route: Get an applicant for a job listing by id
+      get:
+          operationId: getApplicantByIdJobListingId
+          description: get an applicant from a job listing by id
+          parameters:
+            - name: id
+              description: the id of the job listing
+              type: string
+              in: path
+              required: true
+            - name: applicant-id
+              description: the id of the applicant
+              type: string
+              in: path
+              required: true
+          responses:
+            "200":
+              description: Success
+              schema:
+                $ref: "#/definitions/GetApplicantByIdResponse"
+            default:
+              description: Error
+              schema:
+                $ref: "#/definitions/ErrorResponse"
+      put:
+          operationId: updateApplicantStatus
+          description: update the status of an applicant
+          parameters:
+            - name: id
+              description: the id of the job listing
+              type: string
+              in: path
+              required: true
+            - name: applicant-id
+              description: the id of the applciant
+              type: string
+              in: path
+              required: true
+            - name: applicant
+              description: Applicant details
+              in: body
+              required: false
+              schema:
+                $ref: "#/definitions/ApplicantUpdate"
+          responses:
+            "200":
+              description: Success
+              schema:
+                $ref: "#/definitions/ApplicantUpdatedResponse"
+            default:
+              description: Error
+              schema:
+                $ref: "#/definitions/ErrorResponse"
+      delete:
+          operationId: removeApplicant
+          description: remove an applicant by id by job listing id
+          parameters:
+            - name: id
+              description: the id of the job listing
+              type: string
+              in: path
+              required: true
+            - name: applicant-id
+              description: the id of the applciant
+              type: string
+              in: path
+              required: true
+          responses:
+            "200":
+              description: Success
+              schema:
+                $ref: "#/definitions/ApplicantRemovedResponse"
+            default:
+              description: Error
+              schema:
+                $ref: "#/definitions/ErrorResponse"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
+  GetJobListingApplicants:
+      required:
+        - applicants
+      properties:
+        applicants:
+          type: array
+          items:
+            type: object
+            required:
+              - id
+              - name
+              - surname
+              - email
+              - cell_no
+              - status
+            properties:
+              id:
+                type: string
+              name:
+                type: string
+              surname:
+                type: string
+              email:
+                type: string
+              cell_no:
+                type: string
+              status:
+                type: boolean
   GetJobListingByIdResponse:
       required:
         - id
@@ -176,6 +327,78 @@ definitions:
               type: string
             is_active:
               type: boolean
+  GetApplicantByIdResponse:
+      required:
+        - id
+        - name
+        - surname
+        - email
+        - cell_no
+        - status
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        email:
+          type: string
+        cell_no:
+          type: string
+        status:
+          type: boolean
+  Applicant:
+    type: object
+    required:
+      - name
+      - surname
+      - email
+      - cell_no
+      - document
+      - status
+    properties:
+      name:
+        type: string
+        description: applicant name
+      surname:
+        type: string
+        description: applicant surname
+      email:
+        type: string
+        description: applicant email
+      cell_no:
+        type: string
+        description: applicant cell_no
+      document:
+        type: string
+        description: applicant document
+      status:
+        type: string
+        enum: [processing, accepted, rejected]
+  ApplicantUpdate:
+    type: object
+    required:
+      - status
+    properties:
+      name:
+        type: string
+        description: applicant name
+      surname:
+        type: string
+        description: applicant surname
+      email:
+        type: string
+        description: applicant email
+      cell_no:
+        type: string
+        description: applicant cell_no
+      document:
+        type: string
+        description: applicant document
+      status:
+        type: string
+        enum: [processing, accepted, rejected]
   JobListing:
     type: object
     required:
@@ -216,6 +439,30 @@ definitions:
       description:
         type: string
         description: the job listing was updated successfully
+  ApplicantAddedResponse:
+    type: object
+    required:
+      - success
+      - description
+    properties:
+      success:
+        type: integer
+        description: returns 1 if successful
+      description:
+        type: string
+        description: the applicant was added successfully
+  ApplicantUpdatedResponse:
+    type: object
+    required:
+      - success
+      - description
+    properties:
+      success:
+        type: integer
+        description: returns 1 if successful
+      description:
+        type: string
+        description: the applicant was updated successfully
   JobListingUpdatedResponse:
     type: object
     required:
@@ -240,6 +487,18 @@ definitions:
       description:
         type: string
         description: the job listing was removed successfully
+  ApplicantRemovedResponse:
+    type: object
+    required:
+      - success
+      - description
+    properties:
+      success:
+        type: integer
+        description: returns 1 if successful
+      description:
+        type: string
+        description: the applicant was removed successfully
   ErrorResponse:
     required:
       - message
