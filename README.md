@@ -1,3 +1,4 @@
-# Basic REST API to manage job listings and applicants.
-## Swagger
-## Node.js
+# Job listings API
+Basic REST API used to manage job listings and applicants.
+### Swagger
+### Node.js
