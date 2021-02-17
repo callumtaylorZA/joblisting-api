@@ -160,19 +160,14 @@ paths:
               description: Error
               schema:
                 $ref: "#/definitions/ErrorResponse"
-  /job-listings/{id}/applicants/{applicant-id}:
+  /applicants/{id}:
       x-swagger-router-controller: job_listing
       #Route: Get an applicant for a job listing by id
       get:
           operationId: getApplicantByIdJobListingId
-          description: get an applicant from a job listing by id
+          description: get an applicant by id
           parameters:
             - name: id
-              description: the id of the job listing
-              type: string
-              in: path
-              required: true
-            - name: applicant-id
               description: the id of the applicant
               type: string
               in: path
@@ -188,15 +183,10 @@ paths:
                 $ref: "#/definitions/ErrorResponse"
       put:
           operationId: updateApplicantStatus
-          description: update the status of an applicant
+          description: update the status of an applicant by id
           parameters:
             - name: id
-              description: the id of the job listing
-              type: string
-              in: path
-              required: true
-            - name: applicant-id
-              description: the id of the applciant
+              description: the id of the applicant
               type: string
               in: path
               required: true
@@ -217,15 +207,10 @@ paths:
                 $ref: "#/definitions/ErrorResponse"
       delete:
           operationId: removeApplicant
-          description: remove an applicant by id by job listing id
+          description: remove an applicant by id
           parameters:
             - name: id
-              description: the id of the job listing
-              type: string
-              in: path
-              required: true
-            - name: applicant-id
-              description: the id of the applciant
+              description: the id of the applicant
               type: string
               in: path
               required: true
