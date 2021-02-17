@@ -8,13 +8,19 @@
 
 //GET
 function getAll(req, res, next) {
-    console.log(db.getAllJobs());
-    res.json({ job_listings: db.getAllJobs()});
+    db.getAllJobs().then(jobListings => {
+        res.json({ job_listings: jobListings});
+    }).catch(err => {
+        console.error(err);
+    });
 }
 
 //POST
 function save(req, res, next) {
-    res.json({success: db.save(req.body), description: "Job listing added"});
+    db.save(req.body).then(res.json({success: "Success", description: "Job listing added"}))
+    .catch(err => {
+        console.error(err);
+    });
 }
 /*
  *  ====================
@@ -27,15 +33,13 @@ function save(req, res, next) {
 //GET
 function getById(req, res, next) {
     var id = req.swagger.params.id.value;
-    db.find(id).then(result => console.log(result));
-
-    console.log(jobListing);
-
-    if(jobListing) {
-        res.json({joblisting: jobListing});
-    } else {
-        res.status(204).send();
-    }
+    
+    db.findJobListingById(id).then(jobListing => {
+        jobListing.applicants = [];
+        res.json(jobListing);
+    }).catch(err => {
+        console.error(err);
+    });
 }
 
 //PUT
@@ -45,7 +49,7 @@ function update(req, res, next) {
     if(db.update(id, jobListing)) {
         res.json({success: 1, description: "Job listing updated."});
     } else {
-        res.status(204).send();
+        res.status(404).send();
     }
 }
 
