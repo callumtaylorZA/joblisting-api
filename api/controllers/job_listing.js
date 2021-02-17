@@ -1,5 +1,5 @@
 'use strict';
-    var db = require('../../config/db')();
+    var db = require('../../config/db');
     module.exports = {getAll, save, getById, update, remove};
 
 /*  ===================
@@ -8,7 +8,8 @@
 
 //GET
 function getAll(req, res, next) {
-    res.json({ movies: db.find()});
+    console.log(db.getAllJobs());
+    res.json({ job_listings: db.getAllJobs()});
 }
 
 //POST
@@ -26,9 +27,12 @@ function save(req, res, next) {
 //GET
 function getById(req, res, next) {
     var id = req.swagger.params.id.value;
-    var jobListing = db.find(id);
+    db.find(id).then(result => console.log(result));
+
+    console.log(jobListing);
+
     if(jobListing) {
-        res.json(jobListing);
+        res.json({joblisting: jobListing});
     } else {
         res.status(204).send();
     }

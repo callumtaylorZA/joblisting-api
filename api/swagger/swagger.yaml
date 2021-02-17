@@ -303,6 +303,11 @@ definitions:
         type: array
         items:
           type: object
+          required:
+            - id
+            - title
+            - description
+            - is_active
           properties:
             id:
               type: string
@@ -388,13 +393,13 @@ definitions:
     type: object
     required:
       - title
-      - job_description
+      - description
       - is_active
     properties:
       title:
         type: string
         description: job listing name
-      job_description:
+      description:
         type: string
         description: a description of the job
       is_active:
