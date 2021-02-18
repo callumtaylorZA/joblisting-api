@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
-  version: "0.0.1"
-  title: Hello World App
+  version: "0.1.0"
+  title: Job Listings API
 # during dev, should point to your local machine
 host: localhost:10010
 # basePath prefixes all resource paths 
@@ -82,10 +82,10 @@ paths:
              type: string
              in: path
              required: true
-           - name: title
-             description: the title of the job listing
+           - name: job_listing
+             description: the details of the job listing
              in: body
-             required: false
+             required: true
              schema:
                $ref: "#/definitions/JobListingUpdate"
           responses:
@@ -142,7 +142,7 @@ paths:
           parameters:
             - name: id
               description: id of the job listing
-              type: string
+              type: number
               in: path
               required: true
             - name: applicant
@@ -164,7 +164,7 @@ paths:
       x-swagger-router-controller: job_listing
       #Route: Get an applicant for a job listing by id
       get:
-          operationId: getApplicantByIdJobListingId
+          operationId: getApplicantById
           description: get an applicant by id
           parameters:
             - name: id
@@ -254,7 +254,8 @@ definitions:
               cell_no:
                 type: string
               status:
-                type: boolean
+                type: string
+                enum: [processing, accepted, rejected]
   GetJobListingByIdResponse:
       required:
         - id
@@ -294,7 +295,8 @@ definitions:
               cell_no:
                 type: string
               status:
-                type: boolean
+                type: string
+                enum: [processing, accepted, rejected]
   GetJobListingsResponse:
     required:
       - job_listings
@@ -337,7 +339,8 @@ definitions:
         cell_no:
           type: string
         status:
-          type: boolean
+          type: string
+          enum: [processing, accepted, rejected]
   Applicant:
     type: object
     required:
@@ -362,6 +365,7 @@ definitions:
         description: applicant cell_no
       document:
         type: string
+        format: binary
         description: applicant document
       status:
         type: string
@@ -371,21 +375,6 @@ definitions:
     required:
       - status
     properties:
-      name:
-        type: string
-        description: applicant name
-      surname:
-        type: string
-        description: applicant surname
-      email:
-        type: string
-        description: applicant email
-      cell_no:
-        type: string
-        description: applicant cell_no
-      document:
-        type: string
-        description: applicant document
       status:
         type: string
         enum: [processing, accepted, rejected]
@@ -411,7 +400,7 @@ definitions:
       title:
         type: string
         description: job listing name
-      job_description:
+      description:
         type: string
         description: a description of the job
       is_active:
