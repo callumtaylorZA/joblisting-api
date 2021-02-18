@@ -1,11 +1,11 @@
 {
   "name": "joblisting-api",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
-  "description": "New Swagger API Project",
+  "description": "Swagger Job listing API",
   "keywords": [],
-  "author": "",
-  "license": "",
+  "author": "Callum Taylor",
+  "license": "Apache 2.0",
   "main": "app.js",
   "dependencies": {
     "core-js": "^3.8.3",
